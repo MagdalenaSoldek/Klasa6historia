@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Historia Klasa 6</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f4; }
+    .quiz-container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .question { font-size: 18px; margin-bottom: 10px; }
+    .answers button { display: block; margin: 5px 0; padding: 10px; width: 100%; border: none; border-radius: 5px; background-color: #eee; cursor: pointer; }
+    .answers button.correct { background-color: #c8e6c9; }
+    .answers button.wrong { background-color: #ffcdd2; }
+    #next { margin-top: 20px; padding: 10px 20px; background-color: #2196f3; color: white; border: none; border-radius: 5px; display: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <button id="next">Następne pytanie</button>
+  </div>
+
+  <script>
+    const quiz = [
+      { q: "W którym roku Krzysztof Kolumb odkrył Amerykę?", a: ["1492", "1410", "1772", "1918"], correct: 0 },
+      { q: "Kto był twórcą teorii heliocentrycznej?", a: ["Galileusz", "Mikołaj Kopernik", "Newton", "Einstein"], correct: 1 },
+      { q: "Jakie państwo powstało dzięki unii lubelskiej?", a: ["Rzeczpospolita Obojga Narodów", "Polska", "ZSRR", "Unia Europejska"], correct: 0 },
+      { q: "Kiedy miała miejsce bitwa pod Kircholmem?", a: ["1605", "1794", "1410", "1815"], correct: 0 },
+      { q: "Kto dowodził pod Wiedniem w 1683 roku?", a: ["Jan III Sobieski", "Bolesław Chrobry", "Tadeusz Kościuszko", "Napoleon"], correct: 0 }
+    ];
+
+    let current = 0;
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const nextBtn = document.getElementById("next");
+
+    function showQuestion() {
+      questionEl.textContent = quiz[current].q;
+      answersEl.innerHTML = "";
+      quiz[current].a.forEach((answer, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(i, btn);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(i, btn) {
+      Array.from(answersEl.children).forEach(b => {
+        b.disabled = true;
+        b.classList.add("wrong");
+      });
+      if (i === quiz[current].correct) {
+        btn.classList.remove("wrong");
+        btn.classList.add("correct");
+      } else {
+        answersEl.children[quiz[current].correct].classList.remove("wrong");
+        answersEl.children[quiz[current].correct].classList.add("correct");
+      }
+      nextBtn.style.display = "block";
+    }
+
+    nextBtn.onclick = () => {
+      current++;
+      if (current < quiz.length) {
+        showQuestion();
+        nextBtn.style.display = "none";
+      } else {
+        questionEl.textContent = "Gratulacje! Ukończyłaś quiz.";
+        answersEl.innerHTML = "";
+        nextBtn.style.display = "none";
+      }
+    };
+
+    showQuestion();
+  </script>
+</body>
+</html>
